@@ -13,6 +13,15 @@ class Api::RecipesController < ApplicationController
                               )
     end
 
+    sort_attribute = params[:sort]
+    sort_order = params[:sort_order]
+
+    if sort_attribute && sort_order
+      @recipes = @recipes.order(sort_attribute => sort_order)
+    elsif sort_attribute
+      @recipes = @recipes.order(sort_attribute)
+    end
+      
     render "index.json.jbuilder"
   end
 
