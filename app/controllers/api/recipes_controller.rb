@@ -1,7 +1,18 @@
 class Api::RecipesController < ApplicationController
   protect_from_forgery with: :null_session
   def index
-    @recipes = Recipe.all
+    @recipes = Recipe.alli
+
+    search_term = params[:search]
+    if search_term
+      @recipes = @recipes.where(
+                              "title iLIKE ? OR description iLIKE ? OR ingredients iLIKE ?", 
+                              "%#{search_term}%",
+                              "%#{search_term}%",
+                              "%#{search_term}%"
+                              )
+    end
+
     render "index.json.jbuilder"
   end
 
