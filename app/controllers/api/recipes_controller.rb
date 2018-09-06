@@ -1,9 +1,12 @@
 class Api::RecipesController < ApplicationController
   protect_from_forgery with: :null_session
   def index
-    @recipes = Recipe.alli
-
     search_term = params[:search]
+    sort_attribute = params[:sort]
+    sort_order = params[:sort_order]
+    
+    @recipes = Recipe.all
+
     if search_term
       @recipes = @recipes.where(
                               "title iLIKE ? OR description iLIKE ? OR ingredients iLIKE ?", 
@@ -12,9 +15,6 @@ class Api::RecipesController < ApplicationController
                               "%#{search_term}%"
                               )
     end
-
-    sort_attribute = params[:sort]
-    sort_order = params[:sort_order]
 
     if sort_attribute && sort_order
       @recipes = @recipes.order(sort_attribute => sort_order)
